@@ -1,11 +1,11 @@
 extends Node2D
 
 # Declaração de elementos da engine para acessar depois
-onready var connection_panel = $CanvasLayer/ConnectionPanel 
-onready var host_field = $CanvasLayer/ConnectionPanel/GridContainer/HostField
-onready var port_field = $CanvasLayer/ConnectionPanel/GridContainer/PortField
-onready var message_label = $CanvasLayer/MessageLabel
-onready var sync_lost_label = $CanvasLayer/SyncLostLabel
+onready var connection_panel = $ConnectionCanvas/ConnectionPanel 
+onready var host_field = $ConnectionCanvas/ConnectionPanel/GridContainer/HostField
+onready var port_field = $ConnectionCanvas/ConnectionPanel/GridContainer/PortField
+onready var message_label = $ConnectionCanvas/MessageLabel
+onready var sync_lost_label = $ConnectionCanvas/SyncLostLabel
 
 #Função que é executada por padrão assim que a cena é carregada
 func _ready() -> void:
