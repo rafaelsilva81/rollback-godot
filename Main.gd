@@ -1,4 +1,4 @@
-extends Node2D
+extends SGFixedNode2D
 
 # Declaração de elementos da engine para acessar depois
 onready var connection_panel = $ConnectionCanvas/ConnectionPanel 
@@ -6,10 +6,19 @@ onready var host_field = $ConnectionCanvas/ConnectionPanel/GridContainer/HostFie
 onready var port_field = $ConnectionCanvas/ConnectionPanel/GridContainer/PortField
 onready var message_label = $ConnectionCanvas/MessageLabel
 onready var sync_lost_label = $ConnectionCanvas/SyncLostLabel
+onready var fps_counter = $Background/FpsCounter
+
+const LOG_FILE_DIRECTORY = 'res://logs/'
+
+export var logging_enabled := true
+export var fps_enabled := true
 
 #Função que é executada por padrão assim que a cena é carregada
 func _ready() -> void:
 	
+	if (fps_enabled):
+		fps_counter.show()
+		
 	""" 
 		Esses são 3 sinais padrões da ENet que indicam 
 		quando um peer for conectado ou desconectado ou o servidor fechado
@@ -112,10 +121,30 @@ func _on_ResetButton_pressed() -> void:
 #Função callback para quando o SyncManager iniciar
 func _on_SyncManager_sync_started() -> void:
 	message_label.text = "Started!"
+	
+	if logging_enabled:
+		var dir = Directory.new()
+		if not dir.dir_exists(LOG_FILE_DIRECTORY):
+			dir.make_dir(LOG_FILE_DIRECTORY)
+		
+		var datetime = OS.get_datetime(true)
+		var log_file_name = "%04d%02d%02d-%02d%02d%02d-peer-%d.log" % [
+			datetime['year'],
+			datetime['month'],
+			datetime['day'],
+			datetime['hour'],
+			datetime['minute'],
+			datetime['second'],
+			SyncManager.network_adaptor.get_network_unique_id(),
+		]
+		
+		SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
 
 #Função callback para quando o SyncManager parar
 func _on_SyncManager_sync_stopped() -> void:
-	pass
+	if logging_enabled:
+		SyncManager.stop_logging()
+
 
 #Função callback para quando o SyncManager perder a sincronização
 func _on_SyncManager_sync_lost() -> void:
@@ -137,4 +166,8 @@ func _on_SyncManager_sync_error(msg: String) -> void:
 	if peer:
 		peer.close_connection()
 	SyncManager.clear_peers()
+	
+func _process(_delta):
+	if (fps_enabled):
+		fps_counter.text = str("FPS: ", Engine.get_frames_per_second())
 

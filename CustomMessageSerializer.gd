@@ -36,9 +36,9 @@ func serialize_input(all_input: Dictionary) -> PoolByteArray:
 		buffer.put_u8(header)
 		
 		if input.has('input_vector'):
-			var input_vector: Vector2 = input['input_vector']
-			buffer.put_float(input_vector.x)
-			buffer.put_float(input_vector.y)
+			var input_vector: SGFixedVector2 = input['input_vector']
+			buffer.put_64(input_vector.x)
+			buffer.put_64(input_vector.y)
 	
 	buffer.resize(buffer.get_position())
 	return buffer.data_array
@@ -61,7 +61,8 @@ func unserialize_input(serialized: PoolByteArray) -> Dictionary:
 	
 	var header = buffer.get_u8()
 	if header & HeaderFlags.HAS_INPUT_VECTOR:
-		input["input_vector"] = Vector2(buffer.get_float(), buffer.get_float())
+		input["input_vector"] = SGFixed.vector2(buffer.get_64(),buffer.get_64())
+
 	
 	all_input[path] = input
 	return all_input

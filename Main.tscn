@@ -1,25 +1,59 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/PTSans-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Obstacle.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Ball.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
 
-[node name="Main" type="Node2D"]
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://PTSans-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 22
+outline_color = Color( 1, 0, 0, 1 )
+font_data = SubResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 22
+font_data = ExtResource( 3 )
+
+[node name="Main" type="SGFixedNode2D"]
 script = ExtResource( 1 )
+
+[node name="Background" type="Panel" parent="."]
+margin_left = -109.0
+margin_top = -69.0
+margin_right = 1370.0
+margin_bottom = 783.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="FpsCounter" type="Label" parent="Background"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -191.0
+margin_top = 87.0
+margin_right = -100.0
+margin_bottom = 117.0
+custom_fonts/font = SubResource( 4 )
+text = "FPS: ---"
 
 [node name="ConnectionCanvas" type="CanvasLayer" parent="."]
 
 [node name="ConnectionPanel" type="PanelContainer" parent="ConnectionCanvas"]
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 0.474
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -197.0
-margin_top = -45.0
-margin_right = 197.0
-margin_bottom = 45.0
+anchor_bottom = 0.474
+margin_left = -304.0
+margin_top = -67.28
+margin_right = 90.0
+margin_bottom = 22.72
+rect_scale = Vector2( 1.5, 1.5 )
 
 [node name="GridContainer" type="GridContainer" parent="ConnectionCanvas/ConnectionPanel"]
 margin_left = 7.0
@@ -42,6 +76,8 @@ margin_right = 380.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "127.0.0.1"
+caret_blink = true
+caret_blink_speed = 0.5
 
 [node name="PortLabel" type="Label" parent="ConnectionCanvas/ConnectionPanel/GridContainer"]
 margin_top = 33.0
@@ -55,6 +91,8 @@ margin_top = 28.0
 margin_right = 380.0
 margin_bottom = 52.0
 text = "9000"
+caret_blink = true
+caret_blink_speed = 0.5
 
 [node name="ServerButton" type="Button" parent="ConnectionCanvas/ConnectionPanel/GridContainer"]
 margin_top = 56.0
@@ -72,24 +110,27 @@ text = "iniciar como Cliente"
 [node name="MessageLabel" type="Label" parent="ConnectionCanvas"]
 anchor_right = 1.0
 margin_top = 40.0
-margin_bottom = 54.0
+margin_bottom = 89.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/line_spacing = 1
 custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
+custom_fonts/font = SubResource( 2 )
 align = 1
+valign = 1
 
 [node name="ResetButton" type="Button" parent="ConnectionCanvas"]
-anchor_left = 0.5
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -24.0
-margin_top = -235.0
-margin_right = 24.0
-margin_bottom = -215.0
+margin_left = -86.0
+margin_top = -41.0
+margin_right = -38.0
+margin_bottom = -21.0
+rect_scale = Vector2( 1.5, 1.5 )
 text = "RESET"
 
 [node name="SyncLostLabel" type="Label" parent="ConnectionCanvas"]
@@ -104,19 +145,36 @@ text = "SYNC LOST
 REGAINING SYNC..."
 align = 1
 
-[node name="Background" type="Panel" parent="."]
-margin_right = 1025.0
-margin_bottom = 593.0
-custom_styles/panel = SubResource( 1 )
-
 [node name="ServerPlayer" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1010, 300 )
-scale = Vector2( 1, 2 )
+position = Vector2( 1262, 350 )
+scale = Vector2( 1, 2.5 )
+fixed_position_x = 82706432
+fixed_position_y = 22937600
+fixed_scale_y = 163840
 
 [node name="ClientPlayer" parent="." instance=ExtResource( 2 )]
-position = Vector2( 40, 300 )
-scale = Vector2( 1, 2 )
-CONSTANT_SPEED = 10
+position = Vector2( 40, 350 )
+scale = Vector2( 1, 2.5 )
+fixed_position_x = 2621440
+fixed_position_y = 22937600
+fixed_scale_y = 163840
+
+[node name="Obstacle" parent="." instance=ExtResource( 4 )]
+position = Vector2( 635, 0 )
+fixed_position_x = 41615360
+
+[node name="Obstacle2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 635, 721 )
+fixed_position_x = 41615360
+fixed_position_y = 47251456
+
+[node name="Ball" parent="." instance=ExtResource( 5 )]
+position = Vector2( 628, 174 )
+scale = Vector2( 0.5, 0.5 )
+fixed_position_x = 41156608
+fixed_position_y = 11403264
+fixed_scale_x = 32768
+fixed_scale_y = 32768
 
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ServerButton" to="." method="_on_ServerButton_pressed"]
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ClientButton" to="." method="_on_ClientButton_pressed"]
