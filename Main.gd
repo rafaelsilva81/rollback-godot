@@ -8,9 +8,11 @@ onready var message_label = $ConnectionCanvas/MessageLabel
 onready var sync_lost_label = $ConnectionCanvas/SyncLostLabel
 onready var fps_counter = $Background/FpsCounter
 
+const Ball = preload("res://Ball.tscn")
+
 const LOG_FILE_DIRECTORY = 'res://logs/'
 
-export var logging_enabled := true
+export var logging_enabled := false
 export var fps_enabled := true
 
 #Função que é executada por padrão assim que a cena é carregada
@@ -121,6 +123,7 @@ func _on_ResetButton_pressed() -> void:
 #Função callback para quando o SyncManager iniciar
 func _on_SyncManager_sync_started() -> void:
 	message_label.text = "Started!"
+	SyncManager.spawn("Ball", self, Ball, { position = get_viewport_rect().size / 2 })
 	
 	if logging_enabled:
 		var dir = Directory.new()
@@ -139,7 +142,7 @@ func _on_SyncManager_sync_started() -> void:
 		]
 		
 		SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
-
+		
 #Função callback para quando o SyncManager parar
 func _on_SyncManager_sync_stopped() -> void:
 	if logging_enabled:

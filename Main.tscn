@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/PTSans-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Obstacle.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Ball.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -167,14 +166,6 @@ fixed_position_x = 41615360
 position = Vector2( 635, 721 )
 fixed_position_x = 41615360
 fixed_position_y = 47251456
-
-[node name="Ball" parent="." instance=ExtResource( 5 )]
-position = Vector2( 642, 336 )
-scale = Vector2( 0.5, 0.5 )
-fixed_position_x = 42074112
-fixed_position_y = 22020096
-fixed_scale_x = 32768
-fixed_scale_y = 32768
 
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ServerButton" to="." method="_on_ServerButton_pressed"]
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ClientButton" to="." method="_on_ClientButton_pressed"]
