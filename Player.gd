@@ -2,7 +2,7 @@ extends SGKinematicBody2D
 
 
 # Constante de quantos pixels o player vai se mover a cada input
-var speed := 65536*5
+var speed := 65536*6
 
 # Obtem o input do usuário
 func _get_local_input() -> Dictionary:

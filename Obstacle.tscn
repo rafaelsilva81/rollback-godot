@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=2]
 
 [sub_resource type="SGRectangleShape2D" id=1]
-extents_x = 44433408
-extents_y = 524288
+extents_x = 42270720
+extents_y = 589824
 
-[node name="Obstacle" type="SGStaticBody2D"]
+[node name="Barrier" type="SGStaticBody2D"]
 
 [node name="SGColissionShape2D" type="SGCollisionShape2D" parent="."]
 shape = SubResource( 1 )

@@ -8,6 +8,9 @@ onready var message_label = $ConnectionCanvas/MessageLabel
 onready var sync_lost_label = $ConnectionCanvas/SyncLostLabel
 onready var fps_counter = $Background/FpsCounter
 
+onready var P1Label = $Background/P1Label
+onready var P2Label = $Background/P2Label
+
 const Ball = preload("res://Ball.tscn")
 
 const LOG_FILE_DIRECTORY = 'res://logs/'
@@ -123,7 +126,7 @@ func _on_ResetButton_pressed() -> void:
 #Função callback para quando o SyncManager iniciar
 func _on_SyncManager_sync_started() -> void:
 	message_label.text = "Started!"
-	SyncManager.spawn("Ball", self, Ball, { position = get_viewport_rect().size / 2 })
+	SyncManager.spawn("Ball", self, Ball, { position = get_viewport_rect().size / 2})
 	
 	if logging_enabled:
 		var dir = Directory.new()
@@ -147,7 +150,6 @@ func _on_SyncManager_sync_started() -> void:
 func _on_SyncManager_sync_stopped() -> void:
 	if logging_enabled:
 		SyncManager.stop_logging()
-
 
 #Função callback para quando o SyncManager perder a sincronização
 func _on_SyncManager_sync_lost() -> void:
