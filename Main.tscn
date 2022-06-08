@@ -169,10 +169,10 @@ fixed_position_x = 41615360
 fixed_position_y = 47251456
 
 [node name="Ball" parent="." instance=ExtResource( 5 )]
-position = Vector2( 628, 174 )
+position = Vector2( 642, 336 )
 scale = Vector2( 0.5, 0.5 )
-fixed_position_x = 41156608
-fixed_position_y = 11403264
+fixed_position_x = 42074112
+fixed_position_y = 22020096
 fixed_scale_x = 32768
 fixed_scale_y = 32768
 
