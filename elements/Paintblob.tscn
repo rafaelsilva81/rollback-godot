@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/godot-rollback-netcode/NetworkTimer.gd" type="Script" id=1]
+[ext_resource path="res://elements/Paintblob.gd" type="Script" id=2]
+[ext_resource path="res://assets/blob.png" type="Texture" id=3]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="NetworkTimer" type="Node" parent="."]
+script = ExtResource( 1 )
+wait_ticks = 45
+
+[connection signal="timeout" from="NetworkTimer" to="." method="_on_NetworkTimer_timeout"]

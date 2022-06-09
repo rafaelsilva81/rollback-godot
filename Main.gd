@@ -12,6 +12,7 @@ onready var color_picker = $ColorselectCanvas/ColorselectPanel/ColorPicker
 
 const LOG_FILE_DIRECTORY = 'user://detailed_logs'
 
+var colors = {}
 export var logging_enabled := true
 
 #Função que é executada por padrão assim que a cena é carregada
@@ -28,7 +29,6 @@ func _ready() -> void:
 	get_tree().connect("network_peer_connected", self, "_on_network_peer_connected")
 	get_tree().connect("network_peer_disconnected", self, "_on_network_peer_disconnected")
 	get_tree().connect("server_disconnected", self, "_on_server_disconnected")
-	
 	
 	"""
 		Esses são 4 sinais padrões do SyncManager
@@ -75,6 +75,7 @@ func _on_network_peer_connected(peer_id: int):
 		O "servidor" não é responsável por nada da gameplay,
 		porém a Enet requer que um dos nós seja um servidor
 	"""
+	
 	#Diz de qual peer é cada player
 	#Um jogador sempre será o "servidor" que recebe o id 1
 	$ServerPlayer.set_network_master(1)
@@ -84,7 +85,8 @@ func _on_network_peer_connected(peer_id: int):
 		$ClientPlayer.set_network_master(peer_id)
 	else:
 		# Caso contrário, ele é o cliente então ele gera um id unico
-		$ClientPlayer.set_network_master(get_tree().get_network_unique_id())
+		var uid = get_tree().get_network_unique_id()
+		$ClientPlayer.set_network_master(uid)
 	
 	if get_tree().is_network_server(): #Se for um "Servidor"
 		message_label.text = "Starting..." #Mensagem
@@ -139,12 +141,12 @@ func _on_SyncManager_sync_started() -> void:
 		]
 		
 		SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
-
-
+		
 #Função callback para quando o SyncManager parar
 func _on_SyncManager_sync_stopped() -> void:
 	if logging_enabled:
 		SyncManager.stop_logging()
+
 #Função callback para quando o SyncManager perder a sincronização
 func _on_SyncManager_sync_lost() -> void:
 	sync_lost_label.visible = true

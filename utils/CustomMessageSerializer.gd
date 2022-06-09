@@ -9,6 +9,7 @@ var input_path_mapping_reverse := {}
 
 enum HeaderFlags {
 	HAS_INPUT_VECTOR = 1 << 0, # Bit 0
+	IS_PAINTING      = 1 << 1, # Bit 1
 }
 
 func _init() -> void:
@@ -18,7 +19,7 @@ func _init() -> void:
 
 func serialize_input(all_input: Dictionary) -> PoolByteArray:
 	var buffer := StreamPeerBuffer.new()
-	buffer.resize(16)
+	buffer.resize(32)
 	
 	buffer.put_u32(all_input['$'])
 	buffer.put_u8(all_input.size() - 1)
@@ -32,6 +33,9 @@ func serialize_input(all_input: Dictionary) -> PoolByteArray:
 		var input = all_input[path]
 		if input.has('input_vector'):
 			header |= HeaderFlags.HAS_INPUT_VECTOR
+		if input.get('painting', false):
+			header |= HeaderFlags.IS_PAINTING
+
 		
 		buffer.put_u8(header)
 		
@@ -39,7 +43,10 @@ func serialize_input(all_input: Dictionary) -> PoolByteArray:
 			var input_vector: Vector2 = input['input_vector']
 			buffer.put_float(input_vector.x)
 			buffer.put_float(input_vector.y)
-	
+		
+		if (input.has('color')):
+			buffer.put_string(input['color'])
+
 	buffer.resize(buffer.get_position())
 	return buffer.data_array
 
@@ -62,7 +69,11 @@ func unserialize_input(serialized: PoolByteArray) -> Dictionary:
 	var header = buffer.get_u8()
 	if header & HeaderFlags.HAS_INPUT_VECTOR:
 		input["input_vector"] = Vector2(buffer.get_float(), buffer.get_float())
+	if header & HeaderFlags.IS_PAINTING:
+		input["painting"] = true
 	
+	input["color"] = buffer.get_string()
+
 	all_input[path] = input
 	return all_input
 

@@ -152,12 +152,13 @@ text = "SYNC LOST
 REGAINING SYNC..."
 align = 2
 
-[node name="ServerPlayer" parent="." instance=ExtResource( 2 )]
-position = Vector2( 712, 295 )
-scale = Vector2( -1, 1 )
-
 [node name="ClientPlayer" parent="." instance=ExtResource( 2 )]
-position = Vector2( 712, 295 )
+position = Vector2( 553, 380.5 )
+
+[node name="ServerPlayer" parent="." instance=ExtResource( 2 )]
+position = Vector2( 651, 380.5 )
+rotation = -3.14159
+scale = Vector2( 1, -1 )
 
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ServerButton" to="." method="_on_ServerButton_pressed"]
 [connection signal="pressed" from="ConnectionCanvas/ConnectionPanel/GridContainer/ClientButton" to="." method="_on_ClientButton_pressed"]

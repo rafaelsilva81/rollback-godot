@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://elements/PaintDetail.gd" type="Script" id=2]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/488631a80f6ace9 - Copia.png-f762135ff99ff6632456656d5f72f177.stex"
+
+[node name="Node2D" type="Sprite"]
+position = Vector2( 50, 0 )
+scale = Vector2( 0.151, 0.151 )
+texture = SubResource( 1 )
+script = ExtResource( 2 )
