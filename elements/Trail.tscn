@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://elements/Trail.gd" type="Script" id=1]
+
+[node name="Line2D" type="Line2D"]
+width = 20.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource( 1 )
