@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/488631a80f6ace9 - Copia.png" type="Texture" id=1]
+[ext_resource path="res://elements/PaintBrush.gd" type="Script" id=2]
+
+[node name="Sprite" type="Sprite"]
+position = Vector2( 0, 65 )
+scale = Vector2( 0.151, 0.151 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )

@@ -6,10 +6,20 @@ onready var host_field = $ConnectionCanvas/ConnectionPanel/GridContainer/HostFie
 onready var port_field = $ConnectionCanvas/ConnectionPanel/GridContainer/PortField
 onready var message_label = $ConnectionCanvas/MessageLabel
 onready var sync_lost_label = $ConnectionCanvas/SyncLostLabel
+onready var reset_button = $ConnectionCanvas/ResetButton
+onready var color_picker_panel = $ColorselectCanvas/ColorselectPanel
+onready var color_picker = $ColorselectCanvas/ColorselectPanel/ColorPicker
+
+const LOG_FILE_DIRECTORY = 'user://detailed_logs'
+
+export var logging_enabled := true
 
 #Função que é executada por padrão assim que a cena é carregada
 func _ready() -> void:
-	
+	print(get_instance_id())
+	randomize()
+	var random_color = Color(randf(), randf(), randf())
+	color_picker.set_pick_color(random_color)
 	""" 
 		Esses são 3 sinais padrões da ENet que indicam 
 		quando um peer for conectado ou desconectado ou o servidor fechado
@@ -30,9 +40,8 @@ func _ready() -> void:
 	SyncManager.connect("sync_regained", self, "_on_SyncManager_sync_regained")
 	SyncManager.connect("sync_error", self, "_on_SyncManager_sync_error")
 
-# Função callbakc quando o botão "Iniciar como Servidor" for clicado
+# Função callback quando o botão "Iniciar como Servidor" for clicado
 func _on_ServerButton_pressed() -> void:
-	
 	# Cria um "servidor" dentro da camada de multiplayer do godot (ENet)
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(int(port_field.text), 1)
@@ -40,11 +49,11 @@ func _on_ServerButton_pressed() -> void:
 	
 	#Deixa o painel de conexão invisível e mostra uma mensagem
 	connection_panel.visible = false
+	color_picker_panel.visible = false
 	message_label.text = "Listening..." #TODO: Alterar mensagem
-
+	reset_button.visible = true
 # Função callback quando o botão "Iniciar como Cliente" for clicado
 func _on_ClientButton_pressed() -> void:
-	
 	#Cria um "cliente" dentro da camada de multiplayer do godot (Enet)
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_client(host_field.text, int(port_field.text))
@@ -52,8 +61,9 @@ func _on_ClientButton_pressed() -> void:
 	
 	#Deixa o painel de conexão invisível e mostra uma mensagem
 	connection_panel.visible = false
+	color_picker_panel.visible = false
 	message_label.text = "Connecting..." #TODO: Alterar mensagem
-
+	reset_button.visible = true
 # Função callback para quando um peer for conectado do Enet
 func _on_network_peer_connected(peer_id: int):
 	
@@ -65,7 +75,6 @@ func _on_network_peer_connected(peer_id: int):
 		O "servidor" não é responsável por nada da gameplay,
 		porém a Enet requer que um dos nós seja um servidor
 	"""
-	
 	#Diz de qual peer é cada player
 	#Um jogador sempre será o "servidor" que recebe o id 1
 	$ServerPlayer.set_network_master(1)
@@ -112,11 +121,30 @@ func _on_ResetButton_pressed() -> void:
 #Função callback para quando o SyncManager iniciar
 func _on_SyncManager_sync_started() -> void:
 	message_label.text = "Started!"
+	
+	if logging_enabled:
+		var dir = Directory.new()
+		if not dir.dir_exists(LOG_FILE_DIRECTORY):
+			dir.make_dir(LOG_FILE_DIRECTORY)
+		
+		var datetime = OS.get_datetime(true)
+		var log_file_name = "%04d%02d%02d-%02d%02d%02d-peer-%d.log" % [
+			datetime['year'],
+			datetime['month'],
+			datetime['day'],
+			datetime['hour'],
+			datetime['minute'],
+			datetime['second'],
+			SyncManager.network_adaptor.get_network_unique_id(),
+		]
+		
+		SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
+
 
 #Função callback para quando o SyncManager parar
 func _on_SyncManager_sync_stopped() -> void:
-	pass
-
+	if logging_enabled:
+		SyncManager.stop_logging()
 #Função callback para quando o SyncManager perder a sincronização
 func _on_SyncManager_sync_lost() -> void:
 	sync_lost_label.visible = true

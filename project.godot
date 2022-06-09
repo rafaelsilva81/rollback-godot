@@ -34,7 +34,6 @@ _global_script_class_icons={
 
 config/name="Rollback Test"
 run/main_scene="res://Main.tscn"
-config/icon="res://icon.png"
 
 [autoload]
 
@@ -45,7 +44,7 @@ SyncDebugger="*res://addons/godot-rollback-netcode/SyncDebugger.gd"
 
 multirun/number_of_windows=2
 multirun/window_distance=1270
-multirun/add_custom_args=true
+multirun/add_custom_args=false
 multirun/first_window_args="listen"
 multirun/other_window_args="join"
 
@@ -63,14 +62,10 @@ sync_debug={
 
 [network]
 
-rollback/classes/message_serializer="res://CustomMessageSerializer.gd"
+rollback/classes/message_serializer="res://utils/CustomMessageSerializer.gd"
 rollback/debug/rollback_ticks=4
 rollback/debug/random_rollback_ticks=10
 
 [physics]
 
 common/enable_pause_aware_picking=true
-
-[rendering]
-
-environment/default_environment="res://default_env.tres"
